@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pydada2"
+version = "0.1.0"
+description = "Pure-Python DADA2 — exact amplicon sequence variant inference from amplicon sequencing data."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Zehua Zeng", email = "starlitnightly@163.com" },
+]
+keywords = [
+    "amplicon", "16S", "ITS", "ASV", "dada2",
+    "denoising", "microbiome", "sequencing",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+dependencies = [
+    "numpy>=1.23",
+    "scipy>=1.10",
+    "pandas>=1.5",
+    "biopython>=1.80",
+    "pyfastx>=2.0",
+    "numba>=0.57",
+    "tqdm",
+    "matplotlib>=3.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-cov", "ruff"]
+
+[project.urls]
+Homepage = "https://github.com/omicverse/py-dada2"
+Repository = "https://github.com/omicverse/py-dada2"
+Issues = "https://github.com/omicverse/py-dada2/issues"
+"Upstream R reference" = "https://github.com/benjjneb/dada2"
+
+[tool.setuptools.packages.find]
+include = ["pydada2*"]
+exclude = ["tests*", "examples*", "benchmarks*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::FutureWarning",
+    "ignore::RuntimeWarning",
+]

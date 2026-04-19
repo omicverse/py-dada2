@@ -107,16 +107,24 @@ def sub_new(seq0: str, seq1: str,
             homo_gap_p: int = 0, band: int = 16,
             use_kmers: bool = True, kdist_cutoff: float = 0.42,
             q0_seq: Optional[np.ndarray] = None,
-            q1_seq: Optional[np.ndarray] = None) -> Optional[Sub]:
+            q1_seq: Optional[np.ndarray] = None,
+            precomputed_kdist: Optional[float] = None) -> Optional[Sub]:
     """Compute the substitution between seq0 (reference / center) and seq1.
 
     Mirrors sub_new in nwalign_endsfree.cpp. Returns None if the kmer
     distance exceeds ``kdist_cutoff`` (the kmer pre-screen).
+
+    ``precomputed_kdist``: if given, skips the per-call ``kmer_dist``
+    computation. Used by ``_b_compare`` after batching kmer distances
+    via ``kmers.kmer_dist_matrix``.
     """
     if use_kmers:
-        kd = kmer_dist(seq0, seq1, kmer_size=5)
-        if kd > kdist_cutoff:
-            return None
+        if precomputed_kdist is not None:
+            if precomputed_kdist > kdist_cutoff:
+                return None
+        else:
+            if kmer_dist(seq0, seq1, kmer_size=5) > kdist_cutoff:
+                return None
     a0, a1 = nwalign(seq0, seq1, match=match, mismatch=mismatch,
                      gap_p=gap_p, homo_gap_p=homo_gap_p, band=band,
                      endsfree=True)
